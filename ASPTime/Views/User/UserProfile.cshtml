@@ -56,14 +56,10 @@
                             <div class="card-body">
                                 <div class="list-group">
                                     <button type="button" class="list-group-item list-group-item-action active"
-                                            data-toggle="modal" data-target="#categoryAdd">
-                                        Add new category
-                                    </button>
+                                            data-toggle="modal" data-target="#categoryAdd">Add new category</button>
                                     <button id="list-btn-1" data-type="list-btn" type="button"
                                             class="list-group-item list-group-item-action" data-toggle="modal"
-                                            data-target="#categoryAction">
-                                        Программирование
-                                    </button>
+                                            data-target="#categoryAction">Программирование</button>
                                     <button id="list-btn-2" data-type="list-btn" type="button"
                                             class="list-group-item list-group-item-action" data-toggle="modal"
                                             data-target="#categoryAction">
@@ -233,4 +229,6 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="~/Scripts/userUserProfile.js"></script>
 }
