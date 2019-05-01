@@ -1,0 +1,236 @@
+﻿@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+<div class="container">
+    <div class="shadow-lg card mt-100">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center m-none mt-3">
+                    <div class="initials-block rounded-circle">
+                        <table class="h-100 w-100">
+                            <tbody>
+                                <tr class="w-100">
+                                    <td class="align-middle">
+                                        <h1 class="text-center">@User.Identity.GetUserName()[0]</h1>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <hr class="line w-50">
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-3">
+                    <table class="h-100">
+                        <tbody>
+                            <tr>
+                                <td class="align-middle">
+                                    <h1>@User.Identity.GetUserName()</h1>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12 mt-3">
+                    <hr class="line w-20">
+                </div>
+            </div>
+            <div class="container">
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header shadow" id="headingOne">
+                            <h5 class="mb-0 text-center">
+                                <button class="btn card-link w-100" data-toggle="collapse" data-target="#collapseOne"
+                                        aria-expanded="true" aria-controls="collapseOne">
+                                    Categories
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <button type="button" class="list-group-item list-group-item-action active"
+                                            data-toggle="modal" data-target="#categoryAdd">
+                                        Add new category
+                                    </button>
+                                    <button id="list-btn-1" data-type="list-btn" type="button"
+                                            class="list-group-item list-group-item-action" data-toggle="modal"
+                                            data-target="#categoryAction">
+                                        Программирование
+                                    </button>
+                                    <button id="list-btn-2" data-type="list-btn" type="button"
+                                            class="list-group-item list-group-item-action" data-toggle="modal"
+                                            data-target="#categoryAction">
+                                        Работа
+                                    </button>
+                                    <button id="list-btn-3" data-type="list-btn" type="button"
+                                            class="list-group-item list-group-item-action" data-toggle="modal"
+                                            data-target="#categoryAction">
+                                        Учеба
+                                    </button>
+                                    <button id="list-btn-4" data-type="list-btn" type="button"
+                                            class="list-group-item list-group-item-action" data-toggle="modal"
+                                            data-target="#categoryAction">
+                                        Отдых
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header shadow" id="headingTwo">
+                            <h5 class="mb-0 text-center">
+                                <button class="btn card-link collapsed w-100" data-toggle="collapse"
+                                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Statics
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">Today</h5>
+                                                <canvas id="test"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">Last week</h5>
+                                                <canvas id="test1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">Last month</h5>
+                                                <canvas id="test2"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">Last year</h5>
+                                                <canvas id="test3"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryAdd" tabindex="-1" role="dialog" aria-labelledby="Add" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Add">Add category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <label for="validationDefault01">Category name</label>
+                    <input type="text" class="form-control" id="validationDefault01" placeholder="Name" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryAction" tabindex="-1" role="dialog" aria-labelledby="Action" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Action">Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger ml-2 mr-2" data-toggle="modal"
+                        data-target="#categoryDelete">
+                    Delete
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#categoryEdit">
+                    Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryEdit" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Edit">Change name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <label for="EditInput">Category name</label>
+                    <input type="text" class="form-control" id="EditInput" placeholder="Name" required>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryDelete" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Delete">Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3>Are you sure?</h3>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Style{
+    <link href="~/Content/userUserProfile.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
