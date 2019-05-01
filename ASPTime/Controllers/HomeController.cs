@@ -10,13 +10,21 @@ namespace ASPTime.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Timer");
+            else
+                return RedirectToAction("About");     
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
+            return View();
+        }
+
+        public ActionResult Timer()
+        {
             return View();
         }
 
