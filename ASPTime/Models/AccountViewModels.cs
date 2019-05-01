@@ -49,6 +49,11 @@ namespace ASPTime.Models
     public class LoginViewModel
     {
         [Required]
+        [Display(Name = "Имя пользователя")]
+        [DataType(DataType.Text)]
+        public string UserName { get; set; }
+
+        [Required]
         [Display(Name = "Адрес электронной почты")]
         [EmailAddress]
         public string Email { get; set; }
@@ -64,6 +69,11 @@ namespace ASPTime.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Имя пользователя")]
+        public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Адрес электронной почты")]
