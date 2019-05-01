@@ -86,7 +86,7 @@ namespace ASPTime.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Подтверждение пароля")]
+        [Display(Name = "Подтверждение")]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }

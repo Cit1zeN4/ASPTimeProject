@@ -1,7 +1,7 @@
 ﻿@using ASPTime.Models
 @model LoginViewModel
 @{
-    ViewBag.Title = "Выполнить вход";
+    ViewBag.Title = "Войти";
 }
 
 @section ActionIcon{
@@ -17,7 +17,7 @@
 <div class="container main-block d-flex align-items-center justify-content-center">
     <div class="card shadow-lg">
         <div class="card-body">
-            <h3 class="card-title text-center">Sign In</h3>
+            <h3 class="card-title text-center">@ViewBag.Title</h3>
             @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { ReturnUrl = ViewBag.ReturnUrl }))
             {
                 @Html.AntiForgeryToken()
@@ -25,11 +25,11 @@
                 <div class="form-row">
                     <div class="col-sm-12 mt-3">
                         @Html.LabelFor(m => m.UserName, new { @for = "validation1" })
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "validation1", placeholder = "User name" })
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "validation1", placeholder = "Имя пользователя" })
                     </div>
                     <div class="col-sm-12 mt-3">
                         @Html.LabelFor(m => m.Password, new { @for = "validation2" })
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "validation2", placeholder = "Password" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "validation2", placeholder = "Пароль" })
                     </div>
                 </div>
                 <div class="col-sm-12">
@@ -39,10 +39,10 @@
                     </div>
                 </div>
                 <div class="col-sm-12 d-flex align-items-center justify-content-center">
-                    <button class="btn btn-primary mt-3" type="submit">Sign In</button>
+                    <button class="btn btn-primary mt-3" type="submit">Войти</button>
                 </div>
                 <div class="col-sm-12 d-flex align-items-center justify-content-center">
-                    @Html.ActionLink("No account? Sign Up", "Register", null, new { @class = "mt-3" })
+                    @Html.ActionLink("Еще нету аккаунта?", "Register", null, new { @class = "mt-3" })
                 </div>
             }
         </div>
