@@ -1,20 +1,35 @@
-﻿var text;
+﻿var categoryName;
+
+
+
+function editAjaxSuccess(data) {
+    alert('success');
+    return false;
+}
+
+function editAjaxError(jqXHR, exception) {
+    alert('error');
+}
+
+$('button#editActionBtn').click(function (e) {
+    $('input#editInputHidden').val(categoryName);
+});
 
 $('[data-type="list-btn"]').click(function (e) {
-    text = $('#' + e.target.id).text();
+    categoryName = $('#' + e.target.id).text();
 });
 
 $('#categoryAction').on('show.bs.modal', function (e) {
-    $('#Action').text(text);
+    $('#Action').text(categoryName);
 });
 
 $('#categoryEdit').on('show.bs.modal', function (e) {
-    $('#EditInput').val(text);
+    $('#EditInput').val(categoryName);
     $('#categoryAction').modal('hide');
 });
 
 $('#categoryDelete').on('show.bs.modal', function (e) {
-    $('#Delete').text('Deleting category : ' + text);
+    $('#Delete').text('Deleting category : ' + categoryName);
     $('#categoryAction').modal('hide');
 });
 
