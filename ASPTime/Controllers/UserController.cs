@@ -14,10 +14,10 @@ namespace ASPTime.Controllers
     public class UserController : Controller
     {
         [Authorize]
-        public async Task<ActionResult> UserProfile(string userId)
+        public async Task<ActionResult> UserProfile()
         {
             string identityUserId = User.Identity.GetUserId();
-            if (identityUserId == userId)
+            if (identityUserId != null)
             {
                 var viewModel = new UserProfileViewModel();
                 using (var context = new ApplicationDbContext())

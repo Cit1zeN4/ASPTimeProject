@@ -11,16 +11,16 @@ function editAjaxError(jqXHR, exception) {
     alert('error');
 }
 
-$('button#editActionBtn').click(function (e) {
-    $('input#editInputHidden').val(categoryName);
-});
+$('#categoryAction').on('show.bs.modal', function (e) {
+    $('#Action').text(categoryName);
+})
 
-$('[data-type="list-btn"]').click(function (e) {
+$('#category-list').on('click', '[data-type="list-btn"]', function (e) {
     categoryName = $('#' + e.target.id).text();
 });
 
-$('#categoryAction').on('show.bs.modal', function (e) {
-    $('#Action').text(categoryName);
+$('button#editActionBtn').click(function (e) {
+    $('input#editInputHidden').val(categoryName);
 });
 
 $('#categoryEdit').on('show.bs.modal', function (e) {
@@ -29,7 +29,7 @@ $('#categoryEdit').on('show.bs.modal', function (e) {
 });
 
 $('#categoryDelete').on('show.bs.modal', function (e) {
-    $('#Delete').text('Deleting category : ' + categoryName);
+    $('#Delete').text('Удалить категорию ' + categoryName + '?');
     $('#categoryAction').modal('hide');
 });
 

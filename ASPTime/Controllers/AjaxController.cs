@@ -32,5 +32,44 @@ namespace ASPTime.Controllers
             }
             return Json(new { Success = true, Name = newName }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult AddCategory(string name)
+        {
+            if(name == "" || name == null)
+            {
+                return Json(new { Success = false, Message = "Ошибка добавления категории" });
+            }
+            var identityUserId = User.Identity.GetUserId();
+            int categoryId = 0;
+            using (var context = new ApplicationDbContext())
+            {
+                var userid = User.Identity.GetUserId();
+                ApplicationUser user = new ApplicationUser();
+                try
+                {
+                    user = context.Users.Where(o => o.Id == userid).First();
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine("Пользователь не найден " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Пользователь не найден" });
+                }
+                
+                var alreadyExist = context.Categories.Where(o => o.Name == name && o.User.Id == identityUserId).FirstOrDefault();
+                if(alreadyExist == null)
+                {
+                    context.Categories.Add(new Category { Name = name, User = user });
+                    context.SaveChanges();
+                    categoryId = context.Categories.Where(o => o.Name == name & o.User.Id == userid).Select(o => o.Id).FirstOrDefault();
+                }
+                else
+                {
+                    Debug.WriteLine("Ошибка добавления категории");
+                    return Json(new { Success = false, Message = "Ошибка добавления категории" });
+                }
+            }
+            return Json(new { Success = true, Name = name, CategoryId = categoryId }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
