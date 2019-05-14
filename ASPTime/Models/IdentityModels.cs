@@ -11,6 +11,7 @@ namespace ASPTime.Models
     public class ApplicationUser : IdentityUser
     {
         public List<Category> UserCategories { get; set; }
+        public List<TimeData> Times { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType
@@ -28,6 +29,7 @@ namespace ASPTime.Models
         }
 
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<TimeData> Times { get; set; }
 
         public static ApplicationDbContext Create()
         {

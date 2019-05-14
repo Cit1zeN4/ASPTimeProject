@@ -203,7 +203,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-danger" id="deleteCategoryBtn">Delete</button>
             </div>
         </div>
     </div>
@@ -218,6 +218,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="~/Scripts/userUserProfile.js"></script>
     <script>
+        $('button#deleteCategoryBtn').click(function (e) {
+            $.ajax({
+                url: '@Url.Action("DeleteCategory", "Ajax")',
+                type: 'POST',
+                data: { name: categoryName },
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        $('button#list-btn-' + data.CategoryId).detach();
+                        $('#categoryDelete').modal('hide');
+                    }
+                    else {
+                        alert('Error ' + data.Message);
+                    }
+                }
+            });
+        });
+
         $('button#addCategoryBtn').click(function (e) {
             var value = $('input#addCategoryInput').val();
             if (value == "") {
@@ -235,6 +254,7 @@
                             $('div.list-group#category-list').append('<button id="list-btn-'+ data.CategoryId + '" data-type="list-btn" type="button" ' +
                                 ' class="list-group-item list-group-item-action" data-toggle="modal" ' +
                                 'data-target="#categoryAction">' + data.Name + '</button>');
+                            $('#categoryAdd').modal('hide');
                         }
                         else {
                             alert('Error ' + data.Message);

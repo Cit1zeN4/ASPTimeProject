@@ -34,9 +34,9 @@ namespace ASPTime.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCategory(string name)
+        public async Task<ActionResult> AddCategory(string categorynName)
         {
-            if(name == "" || name == null)
+            if(categorynName == "" || categorynName == null)
             {
                 return Json(new { Success = false, Message = "Ошибка добавления категории" });
             }
@@ -44,11 +44,11 @@ namespace ASPTime.Controllers
             int categoryId = 0;
             using (var context = new ApplicationDbContext())
             {
-                var userid = User.Identity.GetUserId();
+                
                 ApplicationUser user = new ApplicationUser();
                 try
                 {
-                    user = context.Users.Where(o => o.Id == userid).First();
+                    user = context.Users.Where(o => o.Id == identityUserId).First();
                 }
                 catch(Exception ex)
                 {
@@ -56,12 +56,12 @@ namespace ASPTime.Controllers
                     return Json(new { Success = false, Message = "Пользователь не найден" });
                 }
                 
-                var alreadyExist = context.Categories.Where(o => o.Name == name && o.User.Id == identityUserId).FirstOrDefault();
+                var alreadyExist = context.Categories.Where(o => o.Name == categorynName && o.User.Id == identityUserId).FirstOrDefault();
                 if(alreadyExist == null)
                 {
-                    context.Categories.Add(new Category { Name = name, User = user });
-                    context.SaveChanges();
-                    categoryId = context.Categories.Where(o => o.Name == name & o.User.Id == userid).Select(o => o.Id).FirstOrDefault();
+                    context.Categories.Add(new Category { Name = categorynName, User = user });
+                    await context.SaveChangesAsync();
+                    categoryId = context.Categories.Where(o => o.Name == categorynName && o.User.Id == identityUserId).Select(o => o.Id).FirstOrDefault();
                 }
                 else
                 {
@@ -69,7 +69,95 @@ namespace ASPTime.Controllers
                     return Json(new { Success = false, Message = "Ошибка добавления категории" });
                 }
             }
-            return Json(new { Success = true, Name = name, CategoryId = categoryId }, JsonRequestBehavior.AllowGet);
+            return Json(new { Success = true, Name = categorynName, CategoryId = categoryId }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteCategory(string categoryName)
+        {
+            if (categoryName == "" || categoryName == null)
+            {
+                return Json(new { Success = false, Message = "Ошибка Удаления категории" });
+            }
+            var identityUserId = User.Identity.GetUserId();
+            int categoryId = 0;
+            using (var context = new ApplicationDbContext())
+            {
+                ApplicationUser user = new ApplicationUser();
+                try
+                {
+                    user = context.Users.Where(o => o.Id == identityUserId).First();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Пользователь не найден " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Пользователь не найден" });
+                }
+                var alreadyExist = context.Categories.Where(o => o.Name == categoryName && o.User.Id == identityUserId).FirstOrDefault();
+
+                if(alreadyExist != null)
+                {
+                    categoryId = context.Categories.Where(o => o.Name == categoryName && o.User.Id == identityUserId).Select(o => o.Id).FirstOrDefault();
+                    context.Categories.Remove(alreadyExist);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    Debug.WriteLine("Ошибка удаления категории");
+                    return Json(new { Success = false, Message = "Ошибка ошибка удаления категории" });
+                }
+                return Json(new { Success = true, CategoryId = categoryId }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SaveTimeResult(string categoryName, int time)
+        {
+            if(categoryName == "" || categoryName == null || time == 0)
+            {
+                return Json(new { Success = false, Message = "Ошибка сохранения результата" });
+            }
+            var identityUserId = User.Identity.GetUserId();
+            Category category = new Category();
+            ApplicationUser user = new ApplicationUser();
+            using (var context = new ApplicationDbContext())
+            {
+                try
+                {
+                    category = context.Categories.Where(o => o.Name == categoryName && o.User.Id == identityUserId).First();
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine("Категория не найдена " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Категория не найдена" });
+                }
+                try
+                {
+                    user = context.Users.Where(o => o.Id == identityUserId).First();
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine("Пользователь не найден " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Пользователь не найдены" });
+                }
+                try
+                {
+                    context.Times.Add(new TimeData
+                    {
+                        Date = DateTime.Now,
+                        Time = time,
+                        Category = category,
+                        User = user
+                    });
+                    await context.SaveChangesAsync();
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine("Ошибка сохранения " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Ошибка сохранения" });
+                }
+                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

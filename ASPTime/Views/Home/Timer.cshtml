@@ -46,7 +46,7 @@
                         <h5>Чем вы занимались?</h5>
                     </div>
                     <div class="col-sm-12">
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <select class="form-control" id="saveResultSelect">
                             <option>Choose...</option>
                             @foreach(var categoty in Model.Categories)
                             {
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Сохранить</button>
+                <button type="button" class="btn btn-primary" id="saveTimeBtn">Сохранить</button>
             </div>
         </div>
     </div>
@@ -125,4 +125,23 @@
     <script src="~/Scripts/timedropper.js"></script>
     <script src="~/Scripts/datepicker.js"></script>
     <script src="~/Scripts/homeTimer.js"></script>
+    <script>
+        $('button#saveTimeBtn').click(function (e) {
+        $.ajax({
+            url: '@Url.Action("SaveTimeResult","Ajax")',
+            type: 'POST',
+            data: { categoryName: $("select#saveResultSelect option:selected").val(), time: toSeconds(timeArray[0], timeArray[1], timeArray[2]) },
+            context: this,
+            async: true,
+            success: function (data) {
+                if (data.Success) {
+                    $('#saveModal').modal('hide');
+                }
+                else {
+                    alert(data.Message);
+                }
+            }
+        });
+    });
+    </script>
 }

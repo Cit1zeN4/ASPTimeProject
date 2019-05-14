@@ -11,6 +11,13 @@
     return hours + " ч. " + minutes + " м.";
 }
 
+function toSeconds(h, m, s) {
+    var result = h * 60 * 60;
+    result = result + m * 60;
+    result = result + s;
+    return result;
+}
+
 var selectedDate = null;
 
 $('#addTimeBtn').click(function (e) {
@@ -72,6 +79,8 @@ $('#addTimeBtn').click(function (e) {
 
 });
 
+var timeArray; 
+
 $(document).ready(function () {
 
     $('#timepicker1').timeDropper({
@@ -119,6 +128,7 @@ $(document).ready(function () {
     });
 
     var timeValue;
+
     var flag = true;
     $('.button-style').click(function (e) {
         if (flag) {
@@ -128,7 +138,7 @@ $(document).ready(function () {
         } else {
             timer.stop();
             flag = true;
-            var timeArray = timeValue.split(':');
+            timeArray = timeValue.split(':');
             $('#body-text').text('Вы работали: ' + timeArray[0] + ' ч. ' + timeArray[1] + ' м. ' + timeArray[2] + ' с. ');
             $('#saveModal').modal('show');
             $('.button-style').text('start');
