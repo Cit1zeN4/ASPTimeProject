@@ -159,5 +159,55 @@ namespace ASPTime.Controllers
                 return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult> SaveTimeResultFromInterval(string categoryName, int time, string dateIso)
+        {
+            if (categoryName == "" || categoryName == null || time == 0 || dateIso == "" || dateIso == null)
+            {
+                return Json(new { Success = false, Message = "Ошибка сохранения результата" });
+            }
+            var identityUserId = User.Identity.GetUserId();
+            Category category = new Category();
+            ApplicationUser user = new ApplicationUser();
+            using (var context = new ApplicationDbContext())
+            {
+                try
+                {
+                    category = context.Categories.Where(o => o.Name == categoryName && o.User.Id == identityUserId).First();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Категория не найдена " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Категория не найдена" });
+                }
+                try
+                {
+                    user = context.Users.Where(o => o.Id == identityUserId).First();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Пользователь не найден " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Пользователь не найдены" });
+                }
+                try
+                {
+                    context.Times.Add(new TimeData
+                    {
+                        Date = DateTime.Parse(dateIso),
+                        Time = time,
+                        Category = category,
+                        User = user
+                    });
+                    await context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Ошибка сохранения " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Ошибка сохранения" });
+                }
+                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

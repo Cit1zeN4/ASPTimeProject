@@ -48,7 +48,7 @@
                     <div class="col-sm-12">
                         <select class="form-control" id="saveResultSelect">
                             <option>Choose...</option>
-                            @foreach(var categoty in Model.Categories)
+                            @foreach (var categoty in Model.Categories)
                             {
                                 <option>@categoty.Name</option>
                             }
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <select required class="form-control" id="selectOption">
+                        <select class="form-control" id="saveTimeSelect">
                             <option>Choose...</option>
                             @foreach (var categoty in Model.Categories)
                             {
@@ -126,22 +126,41 @@
     <script src="~/Scripts/datepicker.js"></script>
     <script src="~/Scripts/homeTimer.js"></script>
     <script>
+
+        function ajaxSaveTimeResult(categoryName, timeResult, dateIso) {
+            $.ajax({
+                url: '@Url.Action("SaveTimeResultFromInterval","Ajax")',
+                type: 'POST',
+                data: { categoryName: /*$("select#saveTimeSelect option:selected").val()*/categoryName, time: timeResult, dateIso: dateIso },
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        $('#addTimeModal').modal('hide');
+                    }
+                    else {
+                        alert(data.Message);
+                    }
+                }
+            });
+        }
         $('button#saveTimeBtn').click(function (e) {
-        $.ajax({
-            url: '@Url.Action("SaveTimeResult","Ajax")',
-            type: 'POST',
-            data: { categoryName: $("select#saveResultSelect option:selected").val(), time: toSeconds(timeArray[0], timeArray[1], timeArray[2]) },
-            context: this,
-            async: true,
-            success: function (data) {
-                if (data.Success) {
-                    $('#saveModal').modal('hide');
+            $.ajax({
+                url: '@Url.Action("SaveTimeResult","Ajax")',
+                type: 'POST',
+                data: { categoryName: $("select#saveTimeSelect option:selected").val(), time: toSeconds(timeArray[0], timeArray[1], timeArray[2]) },
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        $('#saveModal').modal('hide');
+                    }
+                    else {
+                        alert(data.Message);
+                    }
                 }
-                else {
-                    alert(data.Message);
-                }
-            }
+            });
         });
-    });
+
     </script>
 }

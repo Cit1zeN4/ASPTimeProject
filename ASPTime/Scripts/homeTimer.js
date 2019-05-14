@@ -19,6 +19,7 @@ function toSeconds(h, m, s) {
 }
 
 var selectedDate = null;
+var isValid;
 
 $('#addTimeBtn').click(function (e) {
     var isValid = true;
@@ -70,6 +71,8 @@ $('#addTimeBtn').click(function (e) {
             }
         });
 
+        ajaxSaveTimeResult($("select#saveTimeSelect option:selected").val(), timeResult, dateIso);
+
     }
     else {
         $('div.alert').children('ul').remove();
@@ -80,6 +83,8 @@ $('#addTimeBtn').click(function (e) {
 });
 
 var timeArray; 
+var dateIso;
+var timeResult;
 
 $(document).ready(function () {
 
@@ -99,6 +104,7 @@ $(document).ready(function () {
     picker.datepicker({
         onSelect: function (fd, date) {
             selectedDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+            dateIso = date.toISOString();
         }
     });
 
@@ -123,6 +129,7 @@ $(document).ready(function () {
         if (date2 < date1) {
             result = result + 86400000;
         }
+        timeResult = result / 1000;
         $('#timeinterval').text(msToTime(result));
         console.log('timedropper closed');
     });
