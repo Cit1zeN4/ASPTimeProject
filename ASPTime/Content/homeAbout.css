@@ -1,0 +1,58 @@
+﻿body {
+    background-color: #FFC107;
+}
+
+.font {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.block {
+    width: 100%;
+    height: auto;
+}
+
+.main-block {
+    min-height: 100vh;
+}
+
+.img-thumbnail {
+    padding: 0!important;
+    background-color: rgba(0, 0, 0, 0.00);
+    border: none!important;
+    max-width: 100%;
+    height: auto;
+}
+
+.black {
+    background-color: black;
+    color: white;
+}
+
+.white {
+    background-color: white;
+}
+
+.ref-button {
+    width: 320px;
+    font-family: 'Quicksand', sans-serif;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: 210ms;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.ref-button:hover {
+    text-decoration: none;
+    background-color: white;
+    border: white solid 2px;
+    color: black;
+}
