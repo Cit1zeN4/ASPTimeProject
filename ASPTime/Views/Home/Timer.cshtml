@@ -1,0 +1,166 @@
+﻿@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Timer";
+}
+
+@model ASPTime.Models.TimerViewModel
+
+<div class="container main-block d-flex align-items-center justify-content-center">
+    <div class="">
+        <div class="container d-flex justify-content-center">
+            <h1 class="upper-text mt-5">It's time <br> To begin <i class="far fa-clock"></i></h1>
+        </div>
+        <div class="container d-flex justify-content-center mt-3">
+            <h1 class="clock">
+                00:00:00
+            </h1>
+        </div>
+        <div class="container d-flex justify-content-center mt-3">
+            <button type="button" class="button-style">
+                start
+            </button>
+            <button type="button" class="button-style-add" data-toggle="modal" data-target="#addTimeModal">
+                <h3 class="text-center align-middle"><i class="fas fa-plus-circle"></i></h3>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Сохранение результата</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 id="body-text"></h4>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <h5>Чем вы занимались?</h5>
+                    </div>
+                    <div class="col-sm-12">
+                        <select class="form-control" id="saveResultSelect">
+                            <option>Choose...</option>
+                            @foreach (var categoty in Model.Categories)
+                            {
+                                <option>@categoty.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveTimeBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавить запись</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-danger d-none" role="alert">
+                            <h4 class="alert-heading">Ошибка</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <select class="form-control" id="saveTimeSelect">
+                            <option>Choose...</option>
+                            @foreach (var categoty in Model.Categories)
+                            {
+                                <option>@categoty.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-6 mt-3">
+                        <input required type="text" class="text-center form-control datetimepicker-input"
+                               id="timepicker1" />
+                    </div>
+                    <div class="col-12 col-sm-6 mt-3">
+                        <input required type="text" class="text-center form-control datetimepicker-input"
+                               id="timepicker2" />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <h4 class="text-center" id="timeinterval"></h4>
+                    </div>
+                    <div class="col-sm-12 mt-3 d-flex justify-content-center">
+                        <div class="datepicker-here" id="datepicker"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="addTimeBtn" class="btn btn-primary" data-dismiss="alert">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Style{
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link href="~/Content/homeTimer.css" rel="stylesheet" />
+    <link href="~/Content/timedropper.css" rel="stylesheet" />
+    <link href="~/Content/datepicker.css" rel="stylesheet" />
+}
+
+@section Scripts{
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/easytimer.js"></script>
+    <script src="~/Scripts/timedropper.js"></script>
+    <script src="~/Scripts/datepicker.js"></script>
+    <script src="~/Scripts/homeTimer.js"></script>
+    <script>
+
+        function ajaxSaveTimeResult(categoryName, timeResult, dateIso) {
+            $.ajax({
+                url: '@Url.Action("SaveTimeResultFromInterval","Ajax")',
+                type: 'POST',
+                data: { categoryName: categoryName, time: timeResult, dateIso: dateIso },
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        $('#addTimeModal').modal('hide');
+                    }
+                    else {
+                        alert(data.Message);
+                    }
+                }
+            });
+        }
+        $('button#saveTimeBtn').click(function (e) {
+            $.ajax({
+                url: '@Url.Action("SaveTimeResult","Ajax")',
+                type: 'POST',
+                data: { categoryName: $("select#saveResultSelect option:selected").val(), time: toSeconds(timeArray[0], timeArray[1], timeArray[2]) },
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        $('#saveModal').modal('hide');
+                    }
+                    else {
+                        alert(data.Message);
+                    }
+                }
+            });
+        });
+
+    </script>
+}

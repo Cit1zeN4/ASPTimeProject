@@ -1,0 +1,99 @@
+body {
+    background-color: #FFC107;
+}
+
+.clock {
+    font-family: 'Quicksand', sans-serif;
+    color: black;
+    border: 2px solid black;
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+.upper-text {
+    font-family: 'Quicksand', sans-serif;
+    color: black;
+    font-weight: bold;
+}
+
+.button-style {
+    height: 44px;
+    width: 100px;
+    font-family: 'Quicksand', sans-serif;
+    background-color: black;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: 210ms;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button-style:hover {
+    background-color: rgba(0, 0, 0, 0);
+    border: black solid 2px;
+    color: black;
+}
+
+.button-style:focus {
+    outline: none;
+}
+
+.button-style-add {
+    margin-left: 52px;
+    height: 44px;
+    width: 44px;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    transition: 210ms;
+}
+
+.button-style-add h3 {
+    margin: 0px;
+    font-size: 35px;
+}
+
+.button-style-add:hover {
+    color: white;
+}
+
+.button-style-add:focus {
+    outline: none;
+}
+
+.main-block {
+    min-height: 100vh;
+}
+
+.account {
+    position: absolute;
+    top: 35px;
+    right: 35px;
+}
+
+.account-link {
+    color: black;
+    text-decoration: none;
+    transition: 250ms;
+}
+
+.account-link:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.s-50 {
+    height: 50px;
+    width: 50px;
+}
+
+.action-line {
+    position: absolute;
+    width: 100vw;
+}

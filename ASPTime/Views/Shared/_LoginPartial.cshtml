@@ -1,22 +1,79 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
-
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Здравствуйте " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
-    </ul>
-    }
+    <div class="action-line d-flex justify-content-between">
+        <div class="s-50 d-flex justify-content-center">
+            <table class="h-100 w-100">
+                <tbody>
+                    <tr class="w-100">
+                        <td class="align-middle">
+                            <a href="@Url.Action("Index", "Home")" class="account-link">
+                                <h4 class="text-center m-0">
+                                    <i class="far fa-clock"></i>
+                                </h4>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-row-reverse">
+            <div class="s-50 d-flex justify-content-center">
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <table class="h-100 w-100">
+                        <tbody>
+                            <tr class="w-100">
+                                <td class="align-middle">
+                                    <a href="javascript:document.getElementById('logoutForm').submit()" class="account-link">
+                                        <h4 class="text-center m-0">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                        </h4>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="">
+                    <table class="h-100 w-100">
+                        <tbody>
+                            <tr class="w-100">
+                                <td class="align-middle">
+                                    <a href="@Url.Action("UserProfile", "User")" class="account-link">
+                                        <h4 class="text-center m-0">
+                                            @User.Identity.GetUserName()
+                                        </h4>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Регистрация", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Выполнить вход", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
+    <div class="action-line d-flex flex-row-reverse">
+        <div class="s-50 d-flex justify-content-center">
+            <table class="h-100 w-100">
+                <tbody>
+                    <tr class="w-100">
+                        <td class="align-middle">
+                            <a href="@Url.Action("Login", "Account")" class="account-link">
+                                <h4 class="text-center m-0">
+                                    <i class="fas fa-user"></i>
+                                </h4>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 }

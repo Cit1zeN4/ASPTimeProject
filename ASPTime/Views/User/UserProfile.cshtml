@@ -1,0 +1,315 @@
+﻿@using Microsoft.AspNet.Identity
+
+@model ASPTime.Models.UserProfileViewModel
+
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+<div class="container">
+    <div class="shadow-lg card mt-100">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center m-none mt-3">
+                    <div class="initials-block rounded-circle">
+                        <table class="h-100 w-100">
+                            <tbody>
+                                <tr class="w-100">
+                                    <td class="align-middle">
+                                        <h1 class="text-center">@User.Identity.GetUserName()[0]</h1>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <hr class="line w-50">
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-3">
+                    <table class="h-100">
+                        <tbody>
+                            <tr>
+                                <td class="align-middle">
+                                    <h1>@User.Identity.GetUserName()</h1>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12 mt-3">
+                    <hr class="line w-20">
+                </div>
+            </div>
+            <div class="container">
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header shadow" id="headingOne">
+                            <h5 class="mb-0 text-center">
+                                <button class="btn card-link w-100" data-toggle="collapse" data-target="#collapseOne"
+                                        aria-expanded="true" aria-controls="collapseOne">
+                                    Categories
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="list-group" id="category-list">
+                                    <button type="button" class="list-group-item list-group-item-action active"
+                                            data-toggle="modal" data-target="#categoryAdd">
+                                        Add new category
+                                    </button>
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <button id="list-btn-@category.Id" data-type="list-btn" type="button"
+                                                class="list-group-item list-group-item-action" data-toggle="modal"
+                                                data-target="#categoryAction">@category.Name</button>
+                                        }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header shadow" id="headingTwo">
+                            <h5 class="mb-0 text-center">
+                                <button class="btn card-link collapsed w-100" data-toggle="collapse"
+                                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Statics
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">Сегодня</h5>
+                                                <canvas id="test"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">За последний месяц</h5>
+                                                <canvas id="test1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">За последний год</h5>
+                                                <canvas id="test2"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">за все время</h5>
+                                                <canvas id="test3"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryAdd" tabindex="-1" role="dialog" aria-labelledby="Add" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Add">Add category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <div class="modal-body">
+                    <label for="addCategoryInput">Category name</label>
+                    <input type="text" class="form-control" id="addCategoryInput" placeholder="Name" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addCategoryBtn">Add</button>
+                </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryAction" tabindex="-1" role="dialog" aria-labelledby="Action" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Action">Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger ml-2 mr-2" data-toggle="modal"
+                        data-target="#categoryDelete">
+                    Delete
+                </button>
+                <button type="button" class="btn btn-primary" id="editActionBtn" data-toggle="modal"
+                        data-target="#categoryEdit">
+                    Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryEdit" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Edit">Change name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="EditInput">Category name</label>
+                <input hidden id="editInputHidden" name="oldName" type="text" />
+                <input type="text" class="form-control" id="EditInput" name="newName" placeholder="Name" required>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="changeCategoryName">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryDelete" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Delete">Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="deleteCategoryBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Style{
+    <link href="~/Content/userUserProfile.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="~/Scripts/userUserProfile.js"></script>
+    <script>
+        $('button#deleteCategoryBtn').click(function (e) {
+            $.ajax({
+                url: '@Url.Action("DeleteCategory", "Ajax")',
+                type: 'POST',
+                data: { categoryName: categoryName },
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        $('button#list-btn-' + data.CategoryId).detach();
+                        $('#categoryDelete').modal('hide');
+                    }
+                    else {
+                        alert('Error ' + data.Message);
+                    }
+                }
+            });
+        });
+
+        $('button#addCategoryBtn').click(function (e) {
+            var value = $('input#addCategoryInput').val();
+            if (value == "") {
+
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("AddCategory", "Ajax")',
+                    type: 'POST',
+                    data: { categoryName: value },
+                    context: this,
+                    async: true,
+                    success: function (data) {
+                        if (data.Success) {
+                            $('div.list-group#category-list').append('<button id="list-btn-'+ data.CategoryId + '" data-type="list-btn" type="button" ' +
+                                ' class="list-group-item list-group-item-action" data-toggle="modal" ' +
+                                'data-target="#categoryAction">' + data.Name + '</button>');
+                            $('#categoryAdd').modal('hide');
+                        }
+                        else {
+                            alert('Error ' + data.Message);
+                        }
+                    },
+                });
+            }
+        });
+
+        $('button#changeCategoryName').click(function (e) {
+            $.ajax({
+                url: '@Url.Action("ChangeCategoryName", "Ajax")',
+                type: 'POST',
+                data: { oldName: categoryName, newName: $('input#EditInput').val() },
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        $('[data-type="list-btn"]:contains(' + categoryName + ')').text(data.Name);
+                        $('#categoryEdit').modal('hide');
+                    }
+                    else {
+                        alert('ne gg');
+                    }
+                }
+            });
+        });
+
+        $('button[data-target="#collapseTwo"]').click(function (e) {
+            $.ajax({
+                url: '/Ajax/GetStatisticsForToday',
+                type: 'POST',
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        var ctx = document.getElementById('test').getContext('2d');
+                        var ctx1 = document.getElementById('test1').getContext('2d');
+                        var ctx2 = document.getElementById('test2').getContext('2d');
+                        var ctx3 = document.getElementById('test3').getContext('2d');
+                        var obj = data.Value.Val1;
+                        var obj1 = data.Value.Val2;
+                        var obj2 = data.Value.Val3;
+                        var obj3 = data.Value.Val4;
+                        var chart = new Chart(ctx, obj);
+                        var chart1 = new Chart(ctx1, obj1);
+                        var chart2 = new Chart(ctx2, obj2);
+                        var chart3 = new Chart(ctx3, obj3);
+                    }
+                    else {
+                        alert('gg');
+                    }
+                }
+            });
+        });
+
+    </script>
+}

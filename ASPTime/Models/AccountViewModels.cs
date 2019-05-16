@@ -49,9 +49,9 @@ namespace ASPTime.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Адрес электронной почты")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Имя пользователя")]
+        [DataType(DataType.Text)]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -65,6 +65,11 @@ namespace ASPTime.Models
     public class RegisterViewModel
     {
         [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Имя пользователя")]
+        public string UserName { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
@@ -76,7 +81,7 @@ namespace ASPTime.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Подтверждение пароля")]
+        [Display(Name = "Подтверждение")]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
