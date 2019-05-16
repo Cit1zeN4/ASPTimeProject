@@ -131,7 +131,7 @@
             $.ajax({
                 url: '@Url.Action("SaveTimeResultFromInterval","Ajax")',
                 type: 'POST',
-                data: { categoryName: /*$("select#saveTimeSelect option:selected").val()*/categoryName, time: timeResult, dateIso: dateIso },
+                data: { categoryName: categoryName, time: timeResult, dateIso: dateIso },
                 context: this,
                 async: true,
                 success: function (data) {
@@ -148,7 +148,7 @@
             $.ajax({
                 url: '@Url.Action("SaveTimeResult","Ajax")',
                 type: 'POST',
-                data: { categoryName: $("select#saveTimeSelect option:selected").val(), time: toSeconds(timeArray[0], timeArray[1], timeArray[2]) },
+                data: { categoryName: $("select#saveResultSelect option:selected").val(), time: toSeconds(timeArray[0], timeArray[1], timeArray[2]) },
                 context: this,
                 async: true,
                 success: function (data) {

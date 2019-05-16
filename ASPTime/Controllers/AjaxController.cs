@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace ASPTime.Controllers
 {
@@ -34,9 +35,9 @@ namespace ASPTime.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCategory(string categorynName)
+        public async Task<ActionResult> AddCategory(string categoryName)
         {
-            if(categorynName == "" || categorynName == null)
+            if(categoryName == "" || categoryName == null)
             {
                 return Json(new { Success = false, Message = "Ошибка добавления категории" });
             }
@@ -56,12 +57,12 @@ namespace ASPTime.Controllers
                     return Json(new { Success = false, Message = "Пользователь не найден" });
                 }
                 
-                var alreadyExist = context.Categories.Where(o => o.Name == categorynName && o.User.Id == identityUserId).FirstOrDefault();
+                var alreadyExist = context.Categories.Where(o => o.Name == categoryName && o.User.Id == identityUserId).FirstOrDefault();
                 if(alreadyExist == null)
                 {
-                    context.Categories.Add(new Category { Name = categorynName, User = user });
+                    context.Categories.Add(new Category { Name = categoryName, User = user });
                     await context.SaveChangesAsync();
-                    categoryId = context.Categories.Where(o => o.Name == categorynName && o.User.Id == identityUserId).Select(o => o.Id).FirstOrDefault();
+                    categoryId = context.Categories.Where(o => o.Name == categoryName && o.User.Id == identityUserId).Select(o => o.Id).FirstOrDefault();
                 }
                 else
                 {
@@ -69,7 +70,7 @@ namespace ASPTime.Controllers
                     return Json(new { Success = false, Message = "Ошибка добавления категории" });
                 }
             }
-            return Json(new { Success = true, Name = categorynName, CategoryId = categoryId }, JsonRequestBehavior.AllowGet);
+            return Json(new { Success = true, Name = categoryName, CategoryId = categoryId }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -207,6 +208,101 @@ namespace ASPTime.Controllers
                     return Json(new { Success = false, Message = "Ошибка сохранения" });
                 }
                 return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetStatisticsForToday()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            List<Category> categories = new List<Category>();
+            Chart chart = new Chart();
+            Chart chart1 = new Chart();
+            Chart chart2 = new Chart();
+            Chart chart3 = new Chart();
+            List<ChartPieValue> chartPieValues = new List<ChartPieValue>();
+            ChartDataAdapter adapter = new ChartDataAdapter();
+            using (var context = new ApplicationDbContext())
+            {
+                try
+                {
+                    categories = context.Users.Where(o => o.Id == identityUserId)
+                        .Select(o => o.UserCategories).First();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Пользователь не найден " + ex.Source + " " + ex.Message);
+                    return Json(new { Success = false, Message = "Пользователь не найден" });
+                }
+                DateTime toDay = DateTime.Now;
+                int i = 0;
+                foreach (var item in categories)
+                {
+                    chartPieValues.Add(new ChartPieValue
+                    {
+                        Label = item.Name,
+                        Value = Math.Round(item.Times.Where(o => o.Date.Year == toDay.Year && o.Date.Month == toDay.Month && o.Date.Day == toDay.Day)
+                        .Select(o => o.Time).Sum() / 60 / 60, 2),
+                        BackgroundColor = adapter.BackgroundColor[i]
+                    });
+                    i++;
+                    if (i == 4)
+                        i = 0;
+                }
+                chart = adapter.GetChart(chartPieValues);
+                chartPieValues = new List<ChartPieValue>();
+                i = 0;
+                foreach (var item in categories)
+                {
+                    chartPieValues.Add(new ChartPieValue
+                    {
+                        Label = item.Name,
+                        Value = Math.Round(item.Times.Where(o => o.Date.Year == toDay.Year && o.Date.Month == toDay.Month)
+                        .Select(o => o.Time).Sum() / 60 / 60, 2),
+                        BackgroundColor = adapter.BackgroundColor[i]
+                    });
+                    i++;
+                    if (i == 4)
+                        i = 0;
+                }
+                chart1 = adapter.GetChart(chartPieValues);
+                chartPieValues = new List<ChartPieValue>();
+                i = 0;
+                foreach (var item in categories)
+                {
+                    chartPieValues.Add(new ChartPieValue
+                    {
+                        Label = item.Name,
+                        Value = Math.Round(item.Times.Where(o => o.Date.Year == toDay.Year)
+                        .Select(o => o.Time).Sum() / 60 / 60, 2),
+                        BackgroundColor = adapter.BackgroundColor[i]
+                    });
+                    i++;
+                    if (i == 4)
+                        i = 0;
+                }
+                chart2 = adapter.GetChart(chartPieValues);
+                chartPieValues = new List<ChartPieValue>();
+                i = 0;
+                foreach (var item in categories)
+                {
+                    chartPieValues.Add(new ChartPieValue
+                    {
+                        Label = item.Name,
+                        Value = Math.Round(item.Times.Select(o => o.Time).Sum() / 60 / 60, 2),
+                        BackgroundColor = adapter.BackgroundColor[i]
+                    });
+                    i++;
+                    if (i == 4)
+                        i = 0;
+                }
+                chart3 = adapter.GetChart(chartPieValues);
+                var jsonstr = JsonConvert.SerializeObject(new { Success = true, Value = new { Val1 = chart, Val2 = chart1, Val3 = chart2, Val4 = chart3 } });
+                JsonResult json = new JsonResult
+                {
+                    Data = JsonConvert.DeserializeObject(jsonstr)
+                };
+
+                return Content(jsonstr, "application/json");
             }
         }
     }

@@ -17,7 +17,7 @@
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public int Time { get; set; }
+        public double Time { get; set; }
         public virtual Category Category { get; set; }
         public virtual ApplicationUser User { get; set; }
     }

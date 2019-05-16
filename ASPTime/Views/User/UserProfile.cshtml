@@ -87,7 +87,7 @@
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title text-center">Today</h5>
+                                                <h5 class="card-title text-center">Сегодня</h5>
                                                 <canvas id="test"></canvas>
                                             </div>
                                         </div>
@@ -95,7 +95,7 @@
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title text-center">Last week</h5>
+                                                <h5 class="card-title text-center">За последний месяц</h5>
                                                 <canvas id="test1"></canvas>
                                             </div>
                                         </div>
@@ -103,7 +103,7 @@
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title text-center">Last month</h5>
+                                                <h5 class="card-title text-center">За последний год</h5>
                                                 <canvas id="test2"></canvas>
                                             </div>
                                         </div>
@@ -111,7 +111,7 @@
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title text-center">Last year</h5>
+                                                <h5 class="card-title text-center">за все время</h5>
                                                 <canvas id="test3"></canvas>
                                             </div>
                                         </div>
@@ -222,7 +222,7 @@
             $.ajax({
                 url: '@Url.Action("DeleteCategory", "Ajax")',
                 type: 'POST',
-                data: { name: categoryName },
+                data: { categoryName: categoryName },
                 context: this,
                 async: true,
                 success: function (data) {
@@ -246,7 +246,7 @@
                 $.ajax({
                     url: '@Url.Action("AddCategory", "Ajax")',
                     type: 'POST',
-                    data: { name: value },
+                    data: { categoryName: value },
                     context: this,
                     async: true,
                     success: function (data) {
@@ -282,5 +282,34 @@
                 }
             });
         });
+
+        $('button[data-target="#collapseTwo"]').click(function (e) {
+            $.ajax({
+                url: '/Ajax/GetStatisticsForToday',
+                type: 'POST',
+                context: this,
+                async: true,
+                success: function (data) {
+                    if (data.Success) {
+                        var ctx = document.getElementById('test').getContext('2d');
+                        var ctx1 = document.getElementById('test1').getContext('2d');
+                        var ctx2 = document.getElementById('test2').getContext('2d');
+                        var ctx3 = document.getElementById('test3').getContext('2d');
+                        var obj = data.Value.Val1;
+                        var obj1 = data.Value.Val2;
+                        var obj2 = data.Value.Val3;
+                        var obj3 = data.Value.Val4;
+                        var chart = new Chart(ctx, obj);
+                        var chart1 = new Chart(ctx1, obj1);
+                        var chart2 = new Chart(ctx2, obj2);
+                        var chart3 = new Chart(ctx3, obj3);
+                    }
+                    else {
+                        alert('gg');
+                    }
+                }
+            });
+        });
+
     </script>
 }
