@@ -111,7 +111,7 @@
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title text-center">за все время</h5>
+                                                <h5 class="card-title text-center">За все время</h5>
                                                 <canvas id="test3"></canvas>
                                             </div>
                                         </div>
@@ -283,7 +283,7 @@
             });
         });
 
-        $('button[data-target="#collapseTwo"]').click(function (e) {
+        $(document).ready(function (e) {
             $.ajax({
                 url: '/Ajax/GetStatisticsForToday',
                 type: 'POST',
